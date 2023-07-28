@@ -1,8 +1,8 @@
 import express from "express";
 import userRouter from "./routes/users.js";
+import taskRouter from "./routes/taskRoutes.js";
 import { config } from "dotenv";
 import cookieParser from "cookie-parser";
-// import bcrypt from "bcryptjs";
 
 export const app = express();
 
@@ -20,6 +20,7 @@ app.use(cookieParser())
 
 //using routes
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/task", taskRouter);
 
 app.get("/", (req, res) => {
   res.send("nice working");

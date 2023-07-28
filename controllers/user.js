@@ -19,29 +19,28 @@ export const registerUser = async (req, res, next) => {
 
   user = await User.create({ name, email, password: hashedPassword });
 
-  setCookie(user, res, "Registered Successfully", 201)
+  setCookie(user, res, "Registered Successfully", 201);
 };
 
 export const loginUser = async (req, res, next) => {
-  
   const { email, password } = req.body;
   const user = await User.findOne({ email }).select("+password");
 
-  if(!user) return res.status(404).json({
-    success: false,
-    message: "Invalid email or password",
-  })
+  if (!user)
+    return res.status(404).json({
+      success: false,
+      message: "Invalid email or password",
+    });
 
   const isMatch = await bcrypt.compare(password, user.password);
 
-  if(isMatch){
-    setCookie(user, res, `Welcome back, ${user.name}`, 200)
-  }
-  else{
+  if (isMatch) {
+    setCookie(user, res, `Welcome back, ${user.name}`, 200);
+  } else {
     res.status(404).json({
       success: false,
-      message: "UserId or Password not matched"
-    })
+      message: "UserId or Password not matched",
+    });
   }
 };
 
@@ -78,24 +77,22 @@ export const deleteUser = async (req, res) => {
   });
 };
 
-export const getMyProfile = async (req, res) => {
-
-  const {token} = req.cookies;
-
-  if(!token){
-    return res.json({
-      success: false,
-      message: "Login first"
-    })
-  }
-
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-  const user = await User.findById(decoded._id);
-
+export const getMyProfile = (req, res) => {
   res.status(200).json({
     success: true,
     message: "Profile received successfully",
-    user,
-  })
-}
+    user: req.user,
+  });
+};
+
+export const logoutUser = (req, res) => {
+  res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+    })
+    .json({
+      success: true,
+      message: "Logout Successfully",
+    });
+};

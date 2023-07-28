@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
       type: String,
       require: true
     },
-    isComleted:{
+    isCompleted:{
       type: Boolean,
       default: false,
     },
