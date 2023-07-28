@@ -1,11 +1,9 @@
 import express from "express";
 import {
-    deleteUser,
-    findAndUpdate,
-    findById,
     getAllUsers,
+    getMyProfile,
+    loginUser,
     registerUser,
-    special,
 } from "../controllers/user.js";
 
 const router = express.Router();
@@ -14,13 +12,9 @@ router.get("/all", getAllUsers);
 
 router.post("/new", registerUser);
 
-router.get("/userid/special", special);
+router.post("/login", loginUser);
 
-router
-.route("/userid/:id")
-.get(findById)
-.put(findAndUpdate)
-.delete(deleteUser)
+router.get("/me",isAuthenticated, getMyProfile)
 
 // or we can write it as below
 
